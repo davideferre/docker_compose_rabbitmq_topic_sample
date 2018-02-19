@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+     - .:/code
+    depends_on:
+      - "rabbitmq"
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "python", "receive_logs_topic.py", "#"]
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+     - "5672:5672"
+     - "15672:15672"
